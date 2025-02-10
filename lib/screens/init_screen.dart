@@ -39,6 +39,7 @@ class _InitScreenState extends State<InitScreen> {
     return Scaffold(
       body: pages[currentSelectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         onTap: updateCurrentIndex,
         currentIndex: currentSelectedIndex,
         showSelectedLabels: false,

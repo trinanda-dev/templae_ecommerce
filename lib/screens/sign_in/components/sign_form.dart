@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/provider/auth_provider/auth_provider.dart';
 
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/form_error.dart';
@@ -11,7 +14,7 @@ class SignForm extends StatefulWidget {
   const SignForm({super.key});
 
   @override
-  _SignFormState createState() => _SignFormState();
+  State<SignForm> createState() => _SignFormState();
 }
 
 class _SignFormState extends State<SignForm> {
@@ -39,11 +42,14 @@ class _SignFormState extends State<SignForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
           TextFormField(
+            cursorColor: kPrimaryColor,
             keyboardType: TextInputType.emailAddress,
             onSaved: (newValue) => email = newValue,
             onChanged: (value) {
@@ -66,15 +72,14 @@ class _SignFormState extends State<SignForm> {
             },
             decoration: const InputDecoration(
               labelText: "Email",
-              hintText: "Enter your email",
-              // If  you are using latest version of flutter then lable text and hint text shown like this
-              // if you r using flutter less then 1.20.* then maybe this is not working properly
+              hintText: "Masukkan email kamu",
               floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
             ),
           ),
           const SizedBox(height: 20),
           TextFormField(
+            cursorColor: kPrimaryColor,
             obscureText: true,
             onSaved: (newValue) => password = newValue,
             onChanged: (value) {
@@ -97,9 +102,7 @@ class _SignFormState extends State<SignForm> {
             },
             decoration: const InputDecoration(
               labelText: "Password",
-              hintText: "Enter your password",
-              // If  you are using latest version of flutter then lable text and hint text shown like this
-              // if you r using flutter less then 1.20.* then maybe this is not working properly
+              hintText: "Masukkan password kamu",
               floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
             ),
@@ -128,18 +131,35 @@ class _SignFormState extends State<SignForm> {
               )
             ],
           ),
-          FormError(errors: errors),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: FormError(errors: errors),
+          ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {
+            onPressed: authProvider.isLoading ? null : () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // if all are valid then go to success screen
                 KeyboardUtil.hideKeyboard(context);
-                Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                
+                try {
+                  await authProvider.login(email!, password!);
+                  Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                } catch (e) {
+                  addError(error: e.toString());
+                }
               }
             },
-            child: const Text("Continue"),
+            child: authProvider.isLoading
+              ? SizedBox(
+                height: 40,
+                width: 40,
+                child: Lottie.asset(
+                  'assets/lottie/loading-2.json',
+                  fit: BoxFit.cover,
+                ),
+              )
+            : const Text("Selanjutnya"),
           ),
         ],
       ),

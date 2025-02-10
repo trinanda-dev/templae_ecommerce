@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/provider/raja_ongkir_provider/raja_ongkir_provider.dart';
 
 import '../../constants.dart';
 import 'components/complete_profile_form.dart';
@@ -9,6 +11,13 @@ class CompleteProfileScreen extends StatelessWidget {
   const CompleteProfileScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final rajaOngkirProvider = Provider.of<RajaOngkirProvider>(context);
+
+    // Fetch provinces when the screen is loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      rajaOngkirProvider.fetchProvinces();
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
@@ -24,14 +33,14 @@ class CompleteProfileScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text("Complete Profile", style: headingStyle),
                   const Text(
-                    "Complete your details or continue  \nwith social media",
+                    "Lengkapi informasi akun Anda \ndi bawah ini",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   const CompleteProfileForm(),
                   const SizedBox(height: 30),
                   Text(
-                    "By continuing your confirm that you agree \nwith our Term and Condition",
+                    "Dengan melanjutkan, Anda menyetujui \ndengann syarat dan ketentuan aplikasi Kami",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),

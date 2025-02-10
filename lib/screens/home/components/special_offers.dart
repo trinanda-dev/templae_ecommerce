@@ -1,61 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/provider/brand/brand_provider.dart';
 import 'package:shop_app/screens/products/products_screen.dart';
 
 import 'section_title.dart';
 
 class SpecialOffers extends StatelessWidget {
   const SpecialOffers({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SectionTitle(
-            title: "Special for you",
-            press: () {},
-          ),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              SpecialOfferCard(
-                image: "assets/images/Image Banner 2.png",
-                category: "Smartphone",
-                numOfBrands: 18,
-                press: () {
-                  Navigator.pushNamed(context, ProductsScreen.routeName);
-                },
+    return Consumer<BrandProvider>(
+      builder: (context, brandProvider, child) {
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SectionTitle(
+                title: "Spesial untukmu",
+                press: () {},
               ),
-              SpecialOfferCard(
-                image: "assets/images/Image Banner 3.png",
-                category: "Fashion",
-                numOfBrands: 24,
-                press: () {
-                  Navigator.pushNamed(context, ProductsScreen.routeName);
-                },
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...brandProvider.brands.map((brand) {
+                    return SpecialOfferCard(
+                      image: brand['image'] ?? 'assets/images/Image Banner 2.png',
+                      category: brand['nama'],
+                      numOfBrands: brand['jumlah_produk'] ?? 0,
+                      press: () {
+                        Navigator.pushNamed(
+                          context, 
+                          ProductsScreen.routeName,
+                          arguments: brand['id'],
+                        );
+                      },
+                    );
+                  }).toList(),
+                  const SizedBox(width: 20),
+                ],
               ),
-              const SizedBox(width: 20),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
+    
   }
 }
 
 class SpecialOfferCard extends StatelessWidget {
   const SpecialOfferCard({
-    Key? key,
+    super.key,
     required this.category,
     required this.image,
     required this.numOfBrands,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String category, image;
   final int numOfBrands;
@@ -108,7 +113,7 @@ class SpecialOfferCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextSpan(text: "$numOfBrands Brands")
+                        TextSpan(text: "$numOfBrands Produk")
                       ],
                     ),
                   ),

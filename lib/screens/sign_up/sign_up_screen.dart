@@ -25,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text("Register Account", style: headingStyle),
                   const Text(
-                    "Complete your details or continue \nwith social media",
+                    "Lengkapi informasi akun Anda di bawah ini",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -50,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'By continuing your confirm that you agree \nwith our Term and Condition',
+                    'Dengan melanjutkan, Anda menyetujui \ndengann syarat dan ketentuan aplikasi Kami',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   )

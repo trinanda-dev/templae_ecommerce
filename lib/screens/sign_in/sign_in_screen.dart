@@ -32,7 +32,7 @@ class SignInScreen extends StatelessWidget {
                     ),
                   ),
                   const Text(
-                    "Sign in with your email and password  \nor continue with social media",
+                    "Sign in dengan email dan password \natau lanjutkan dengan sosial media",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),

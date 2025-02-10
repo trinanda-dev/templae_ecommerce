@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xFFFF7643);
+const kPrimaryColor = Color.fromARGB(255, 95, 189, 49);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
@@ -19,19 +19,44 @@ const headingStyle = TextStyle(
   height: 1.5,
 );
 
+const labelStyle = TextStyle(
+  fontSize: 16,
+  color: kPrimaryColor,
+  fontWeight: FontWeight.w400,
+  height: 1.5,
+);
+
+
+
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-const String kEmailNullError = "Please Enter your email";
-const String kInvalidEmailError = "Please Enter Valid Email";
-const String kPassNullError = "Please Enter your password";
-const String kShortPassError = "Password is too short";
-const String kMatchPassError = "Passwords don't match";
-const String kNamelNullError = "Please Enter your name";
-const String kPhoneNumberNullError = "Please Enter your phone number";
-const String kAddressNullError = "Please Enter your address";
+final RegExp invitationCodeValidatorRegExp = 
+    RegExp(r'^[A-Za-z0-9]{10}$');
+final RegExp phoneNumberValidatorRegExp = 
+    RegExp(r'^08[0-9]{8,11}$');
+final RegExp postalCodeValidatorRegExp = 
+    RegExp(r'^[0-9]{5}$');
+
+const String kEmailNullError = "Masukkan email Anda";
+const String kInvalidEmailError = "Masukkan email yang Valid";
+const String kPassNullError = "Masukkan kata sandi Anda";
+const String kShortPassError = "Kata sandi terlalu pendek";
+const String kMatchPassError = "Kata sandi tidak cocok";
+const String kNamelNullError = "Masukkan nama Anda";
+const String kPhoneNumberNullError = "Masukkan nomor telepon Anda";
+const String kInvalidPhoneNumber = "Nomor telpon tidak valid";
+const String kAddressNullError = "Masukkan alamat lengkap Anda";
+const String kInvitationCodeNullError = "Masukkan kode undangan Anda";
+const String kInvalidInvitationCode = "Kode undangan tidak valid";
+const String kStoreNameNullError = "Masukkan nama toko Anda";
+const String kpostalCodeNullError = "Masukkan kode pos Anda";
+const String kInvalidPostalCode = "Kode pos tidak valid";
+
+
+
 
 final otpInputDecoration = InputDecoration(
   contentPadding: const EdgeInsets.symmetric(vertical: 16),

@@ -1,4 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:shop_app/screens/signup_success/signup_success_screen..dart';
+import 'package:shop_app/screens/signup_user_information/signup_user_infromation_screen.dart';
+import 'screens/invitation_code/invitation_code_screen.dart';
 import 'package:shop_app/screens/products/products_screen.dart';
 
 import 'screens/cart/cart_screen.dart';
@@ -30,4 +33,7 @@ final Map<String, WidgetBuilder> routes = {
   DetailsScreen.routeName: (context) => const DetailsScreen(),
   CartScreen.routeName: (context) => const CartScreen(),
   ProfileScreen.routeName: (context) => const ProfileScreen(),
+  InvitationCodeScreen.routeName: (context) => const InvitationCodeScreen(),
+  SignupUserInformationScreen.routeName: (context) => const SignupUserInformationScreen(),
+  SignupSuccessScreen.routeName: (context) => const SignupSuccessScreen(),
 };
