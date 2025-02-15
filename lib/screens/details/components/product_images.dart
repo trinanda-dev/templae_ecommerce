@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/provider/produk/produk_provider.dart';
 
 import '../../../constants.dart';
-import '../../../models/Product.dart';
 
 class ProductImages extends StatefulWidget {
   const ProductImages({
-    Key? key,
-    required this.product,
-  }) : super(key: key);
+    super.key,
+    required this.productId,
+  });
 
-  final Product product;
+  final int productId;
 
   @override
   State<ProductImages> createState() => _ProductImagesState();
@@ -19,13 +20,22 @@ class _ProductImagesState extends State<ProductImages> {
   int selectedImage = 0;
   @override
   Widget build(BuildContext context) {
+    // Ambil data dari provider
+    final produkProvider = Provider.of<ProdukProvider>(context);
+    final product = produkProvider.products.firstWhere(
+      (prod) => prod.id == widget.productId,
+      orElse: () => throw Exception('Product not found'),
+    );
+
     return Column(
       children: [
         SizedBox(
           width: 238,
           child: AspectRatio(
             aspectRatio: 1,
-            child: Image.asset(widget.product.images[selectedImage]),
+            child: Image.network(
+              product.images[selectedImage]
+            ),
           ),
         ),
         // SizedBox(height: 20),
@@ -33,7 +43,7 @@ class _ProductImagesState extends State<ProductImages> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ...List.generate(
-              widget.product.images.length,
+              product.images.length,
               (index) => SmallProductImage(
                 isSelected: index == selectedImage,
                 press: () {
@@ -41,7 +51,7 @@ class _ProductImagesState extends State<ProductImages> {
                     selectedImage = index;
                   });
                 },
-                image: widget.product.images[index],
+                image: product.images[index],
               ),
             ),
           ],
@@ -51,26 +61,22 @@ class _ProductImagesState extends State<ProductImages> {
   }
 }
 
-class SmallProductImage extends StatefulWidget {
-  const SmallProductImage(
-      {super.key,
-      required this.isSelected,
-      required this.press,
-      required this.image});
+class SmallProductImage extends StatelessWidget {
+  const SmallProductImage({
+    super.key,
+    required this.isSelected,
+    required this.press,
+    required this.image,
+  });
 
   final bool isSelected;
   final VoidCallback press;
   final String image;
 
   @override
-  State<SmallProductImage> createState() => _SmallProductImageState();
-}
-
-class _SmallProductImageState extends State<SmallProductImage> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.press,
+      onTap: press,
       child: AnimatedContainer(
         duration: defaultDuration,
         margin: const EdgeInsets.only(right: 16),
@@ -81,9 +87,12 @@ class _SmallProductImageState extends State<SmallProductImage> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: kPrimaryColor.withOpacity(widget.isSelected ? 1 : 0)),
+              color: kPrimaryColor.withOpacity(isSelected ? 1 : 0)),
         ),
-        child: Image.asset(widget.image),
+        child: Image.network(
+          image, // Pakai Image.network agar sesuai dengan API
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

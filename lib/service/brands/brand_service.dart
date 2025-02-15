@@ -7,7 +7,7 @@ class BrandService {
   // Fungsi yang digunakan untuk menampilkan brand-brand yang dimiliki oleh produk
   Future<List<dynamic>> getBrands() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/brands'));
+      final response = await http.get(Uri.parse('$baseUrl/brand'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         return data['data']; // Return daftar brands
@@ -24,7 +24,7 @@ class BrandService {
     try {
       final response = await http.get(
         Uri.parse(
-          '$baseUrl/products/brand/$brandId',
+          '$baseUrl/produk/brand/$brandId',
         )
       );
 

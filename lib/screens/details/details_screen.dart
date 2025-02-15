@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shop_app/screens/cart/cart_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/provider/cart/cart_provider.dart';
+import 'package:shop_app/screens/details/components/quantity_control.dart';
 
 import '../../models/Product.dart';
-import 'components/color_dots.dart';
 import 'components/product_description.dart';
 import 'components/product_images.dart';
 import 'components/top_rounded_container.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   static String routeName = "/details";
 
   const DetailsScreen({super.key});
 
   @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  int quantity = 1;
+
+  @override
   Widget build(BuildContext context) {
-    final ProductDetailsArguments agrs =
+    final ProductDetailsArguments args =
         ModalRoute.of(context)!.settings.arguments as ProductDetailsArguments;
-    final product = agrs.product;
+    final product = args.product;
+
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -57,9 +66,9 @@ class DetailsScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Text(
-                      "4.7",
-                      style: TextStyle(
+                    Text(
+                      product.rating.toStringAsFixed(1),
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
@@ -76,7 +85,7 @@ class DetailsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ProductImages(product: product),
+          ProductImages(productId: product.id),
           TopRoundedContainer(
             color: Colors.white,
             child: Column(
@@ -85,11 +94,26 @@ class DetailsScreen extends StatelessWidget {
                   product: product,
                   pressOnSeeMore: () {},
                 ),
+                // Ganti bagian ColorDots dengan QuantityControl
                 TopRoundedContainer(
                   color: const Color(0xFFF6F7F9),
                   child: Column(
                     children: [
-                      ColorDots(product: product),
+                      QuantityControl(
+                        quantity: quantity,
+                        onIncrement: () {
+                          setState(() {
+                            quantity++;
+                          });
+                        },
+                        onDecrement: () {
+                          if (quantity > 1) {
+                            setState(() {
+                              quantity--;
+                            });
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -102,12 +126,18 @@ class DetailsScreen extends StatelessWidget {
         color: Colors.white,
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, CartScreen.routeName);
+                // Tambahkan produk ke keranjang dengan jumlah 'quantity'
+                Provider.of<CartProvider>(context, listen: false)
+                    .addToCart(product.id, jumlah: quantity);
+                
+                // Setelah berhasil menambahkan, kembali ke halaman sebelumnya
+                Navigator.pop(context);
               },
-              child: const Text("Add To Cart"),
+              child: const Text("Tambahkan ke Keranjang"),
             ),
           ),
         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/brand/brand_provider.dart';
-import 'package:shop_app/screens/products/products_screen.dart';
+import 'package:shop_app/screens/all_brand/all_brand_screen..dart';
+import 'package:shop_app/screens/products/brand_product_screen.dart';
 
 import 'section_title.dart';
 
@@ -20,7 +22,15 @@ class SpecialOffers extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SectionTitle(
                 title: "Spesial untukmu",
-                press: () {},
+                press: () {
+                  Navigator.push(
+                    context, 
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      child: const AllBrandScreen(),
+                    )
+                  );
+                },
               ),
             ),
             SingleChildScrollView(
@@ -29,14 +39,19 @@ class SpecialOffers extends StatelessWidget {
                 children: [
                   ...brandProvider.brands.map((brand) {
                     return SpecialOfferCard(
-                      image: brand['image'] ?? 'assets/images/Image Banner 2.png',
+                      image: brand['image'] ?? '',
                       category: brand['nama'],
-                      numOfBrands: brand['jumlah_produk'] ?? 0,
+                      numOfBrands: brand['produks_count'] ?? 0,
                       press: () {
-                        Navigator.pushNamed(
+                        Navigator.push(
                           context, 
-                          ProductsScreen.routeName,
-                          arguments: brand['id'],
+                          PageTransition(
+                            type: PageTransitionType.fade,
+                            child: BrandProductScreen(
+                              brandId: brand['id'],
+                              brandName: brand['nama'],
+                            )
+                          ),
                         );
                       },
                     );
@@ -79,9 +94,11 @@ class SpecialOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.asset(
+                Image.network(
                   image,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
                 Container(
                   decoration: const BoxDecoration(

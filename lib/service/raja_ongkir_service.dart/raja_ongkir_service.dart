@@ -11,9 +11,6 @@ class RajaOngkirService {
       headers: {"key": apiKey},
     );
 
-    print("Response Code: ${response.statusCode}");
-    print("Response Body: ${response.body}");
-
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List provinces = data['rajaongkir']['results'];

@@ -4,6 +4,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/category/category_provider.dart';
 import 'package:shop_app/screens/all_categories/all_categories_screen.dart';
+import 'package:shop_app/screens/products/category_product_screen.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key});
@@ -51,7 +52,16 @@ class Categories extends StatelessWidget {
                   ),
                 );
               } else {
-                // Tambahkan navigasi ke halaman produk kategori
+                Navigator.push(
+                  context, 
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: CategoryProductScreen(
+                      categoryName: categoriesToShow[index]['nama'],
+                      categoryId: categoriesToShow[index]['id'],
+                    ),
+                  )
+                );
               }
             },
           ),

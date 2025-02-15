@@ -29,7 +29,7 @@ class _InitScreenState extends State<InitScreen> {
     const HomeScreen(),
     const FavoriteScreen(),
     const Center(
-      child: Text("Chat"),
+      child: Text("Belum Ada Transaksi"),
     ),
     const ProfileScreen()
   ];
@@ -82,20 +82,20 @@ class _InitScreenState extends State<InitScreen> {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              "assets/icons/Chat bubble Icon.svg",
+              "assets/icons/Transaction.svg",
               colorFilter: const ColorFilter.mode(
                 inActiveIconColor,
                 BlendMode.srcIn,
               ),
             ),
             activeIcon: SvgPicture.asset(
-              "assets/icons/Chat bubble Icon.svg",
+              "assets/icons/Transaction.svg",
               colorFilter: const ColorFilter.mode(
                 kPrimaryColor,
                 BlendMode.srcIn,
               ),
             ),
-            label: "Chat",
+            label: "Transaksi",
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(

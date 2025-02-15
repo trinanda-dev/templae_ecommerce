@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/category/category_provider.dart';
 import 'package:shop_app/screens/home/components/categories.dart';
+import 'package:shop_app/screens/products/category_product_screen.dart';
 
 
 class AllCategoriesScreen extends StatelessWidget {
@@ -30,7 +32,16 @@ class AllCategoriesScreen extends StatelessWidget {
             return CategoryCard(
               category: category,
               press: () {
-                // Navigasi ke halaman produk kategori
+                Navigator.push(
+                  context, 
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: CategoryProductScreen(
+                      categoryId: category['id'], 
+                      categoryName: category['nama'],
+                    )
+                  )
+                );
               },
             );
           },

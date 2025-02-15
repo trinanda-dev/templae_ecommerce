@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop_app/models/User.dart';
 import 'package:shop_app/service/auth_service/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -8,12 +7,10 @@ class AuthProvider with ChangeNotifier {
     client: http.Client(),
   );
 
-  UserModel? _user;
   bool _isLoggedIn = false;
   bool _isLoading = false;
 
   // Getter untuk user
-  UserModel? get user => _user;
 
   // Getter untuk kondisi _isLoggedIn
   bool get isLoggedIn => _isLoggedIn;
@@ -30,7 +27,6 @@ class AuthProvider with ChangeNotifier {
       final response = await _authService.login(emailOrPhone, password);
 
       if(response['status'] == 'success') {
-        _user = UserModel.fromJson(response['user']);
         _isLoading = false;
         notifyListeners();
       } else {
@@ -81,7 +77,6 @@ class AuthProvider with ChangeNotifier {
       );
 
       if (response['status'] == 'success') {
-        _user = UserModel.fromJson(response['user']);
         notifyListeners(); // Beritahu UI
       } else if (response['error'] != null) {
         throw Exception(response['error']);
@@ -102,7 +97,6 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
     try {
       await _authService.logout();
-      _user = null;
       _isLoggedIn = false;
       _isLoading = false;
       notifyListeners();

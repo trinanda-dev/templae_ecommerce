@@ -7,7 +7,7 @@ class CategoryService {
   // Fungsi yang digunakan untuk menampilkan kategori yang dimiliki dari produk
   Future<List<dynamic>> getCategories() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/kategoris'));
+      final response = await http.get(Uri.parse('$baseUrl/kategori'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         return data['data']; // Return daftar kategori

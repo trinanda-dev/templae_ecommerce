@@ -1,17 +1,24 @@
-// ignore: file_names
-import 'Product.dart';
+import 'product.dart';
 
 class Cart {
+  final int id;
+  final int produkId;
+  final int jumlah;
   final Product product;
-  final int numOfItem;
 
-  Cart({required this.product, required this.numOfItem});
+  Cart({
+    required this.id,
+    required this.produkId,
+    required this.jumlah,
+    required this.product,
+  });
+
+  factory Cart.fromJson(Map<String, dynamic> json) {
+    return Cart(
+      id: json['id'],
+      produkId: json['produk_id'],
+      jumlah: json['jumlah'],
+      product: Product.fromJson(json['produk']),
+    );
+  }
 }
-
-// Demo data for our cart
-
-List<Cart> demoCarts = [
-  Cart(product: demoProducts[0], numOfItem: 2),
-  Cart(product: demoProducts[1], numOfItem: 1),
-  Cart(product: demoProducts[3], numOfItem: 1),
-];

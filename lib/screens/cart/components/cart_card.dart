@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/helper/currency.dart';
 
 import '../../../constants.dart';
-import '../../../models/Cart.dart';
 
 class CartCard extends StatelessWidget {
-  const CartCard({
-    Key? key,
-    required this.cart,
-  }) : super(key: key);
+  final Map<String, dynamic> cart;
 
-  final Cart cart;
+  const CartCard({
+    super.key,
+    required this.cart,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,10 @@ class CartCard extends StatelessWidget {
                 color: const Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Image.asset(cart.product.images[0]),
+              child: Image.network(
+                cart['produk']['image_url'],
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -34,20 +37,29 @@ class CartCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              cart.product.title,
+              cart['produk']['nama'],
               style: const TextStyle(color: Colors.black, fontSize: 16),
               maxLines: 2,
             ),
             const SizedBox(height: 8),
             Text.rich(
               TextSpan(
-                text: "\$${cart.product.price}",
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, color: kPrimaryColor),
                 children: [
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Currency(
+                      value: double.parse(cart['produk']['harga'].toString()),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ),
                   TextSpan(
-                      text: " x${cart.numOfItem}",
-                      style: Theme.of(context).textTheme.bodyLarge),
+                    text: " x ${cart['jumlah']}",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                 ],
               ),
             )
