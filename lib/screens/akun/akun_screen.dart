@@ -18,7 +18,7 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
   final TextEditingController _nomorHpController = TextEditingController();
   final TextEditingController _namaTokoController = TextEditingController();
 
-  bool _isLoadingSave = false; // Untuk simulasi proses penyimpanan
+  bool _isUpdating = false; // Untuk simulasi proses penyimpanan
 
   @override
   void initState() {
@@ -35,6 +35,65 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
     _namaController.text = userData['nama'] ?? '';
     _nomorHpController.text = userData['nomor_hp'] ?? '';
     _namaTokoController.text = userData['nama_toko'] ?? '';
+  }
+
+  // Fungsi yang digunakan untuk memanggil provider update()
+   // Fungsi untuk memanggil provider update()
+  Future<void> _updatePengguna() async {
+    // Pastikan form valid
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isUpdating = true);
+
+    final data = {
+      'nama': _namaController.text,
+      'nomor_hp': _nomorHpController.text,
+      'nama_toko': _namaTokoController.text,
+    };
+
+    try {
+      final penggunaProvider = Provider.of<PenggunaProvider>(context, listen: false);
+      // Panggil update() dari provider
+      await penggunaProvider.update(data);
+
+      // Setelah update dilakukan, langsung ambil data baru
+      await penggunaProvider.fetchPengguna();
+
+      // Tampilkan pesan sukses
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: 
+        Center(
+          child: Text(
+            "Data berhasil diperbarui",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Muli',
+            ),
+          ),
+        )),
+      );
+    } catch (e) {
+      // Tampilkan pesan error
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Center(
+          child: Text(
+            "Gagal menyimpan perubahan: $e",
+            style: const  TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Muli',
+            ),
+          ),
+        )),
+      );
+    } finally {
+      setState(() => _isUpdating = false);
+    }
   }
 
   @override
@@ -88,11 +147,49 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                 children: [
                   // Field Nama
                   TextFormField(
+                    style: const TextStyle(
+                      fontFamily: 'Muli',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
                     controller: _namaController,
-                    decoration: const InputDecoration(
-                      labelText: "Name",
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person),
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.red,
+                          width: 1,
+                        )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                          width: 1.0,
+                        )
+                      ),
+                      labelText: "Nama",
+                      labelStyle: const TextStyle(
+                        fontFamily: 'Muli',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.grey
+                      ),
+                      floatingLabelStyle: const TextStyle(
+                        fontFamily: 'Muli',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.green
+                      ),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -105,12 +202,50 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
 
                   // Field Nomor HP
                   TextFormField(
+                    style: const TextStyle(
+                      fontFamily: 'Muli',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
                     controller: _nomorHpController,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(
-                      labelText: "Nomor HP",
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.phone),
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.red,
+                          width: 1,
+                        )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                          width: 1.0,
+                        )
+                      ),
+                      labelText: "Nomor Hp",
+                      labelStyle: const TextStyle(
+                        fontFamily: 'Muli',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.grey
+                      ),
+                      floatingLabelStyle: const TextStyle(
+                        fontFamily: 'Muli',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.green
+                      ),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -123,11 +258,49 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
 
                   // Field Nama Toko
                   TextFormField(
+                    style: const TextStyle(
+                      fontFamily: 'Muli',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
                     controller: _namaTokoController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.red,
+                          width: 1,
+                        )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          color: Colors.green,
+                          width: 1.0,
+                        )
+                      ),
                       labelText: "Nama Toko",
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.store),
+                      labelStyle: const TextStyle(
+                        fontFamily: 'Muli',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.grey
+                      ),
+                      floatingLabelStyle: const TextStyle(
+                        fontFamily: 'Muli',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.green
+                      ),
+                      border: const OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -146,36 +319,23 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    onPressed: _isLoadingSave
-                        ? null
-                        : () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() => _isLoadingSave = true);
-
-                              // Contoh: panggil method update user
-                              // misalnya: await penggunaProvider.updatePengguna(...);
-                              // Di sini kita hanya simulasi
-                              await Future.delayed(const Duration(seconds: 2));
-
-                              setState(() => _isLoadingSave = false);
-                              if (!mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Perubahan berhasil disimpan."),
-                                ),
-                              );
-                            }
-                          },
-                    child: _isLoadingSave
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
+                    onPressed: _isUpdating ? null: _updatePengguna,
+                    child: _isUpdating
+                        ? Lottie.asset(
+                            'assets/lottie/loading-2.json',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                        )
+                        : const Text(
+                          "Simpan",
+                          style: TextStyle(
+                            fontFamily: 'Muli',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
                           )
-                        : const Text("Save changes"),
+                        ),
                   ),
                 ],
               ),

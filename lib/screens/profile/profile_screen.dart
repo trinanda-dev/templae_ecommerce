@@ -6,7 +6,7 @@ import 'package:shop_app/provider/auth_provider/auth_provider.dart';
 import 'package:shop_app/screens/akun/akun_screen.dart';
 import 'package:shop_app/screens/akun/alamat/alamat_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'components/profile_menu.dart';
 import 'components/profile_pic.dart';
 
@@ -55,7 +55,23 @@ class ProfileScreen extends StatelessWidget {
             ProfileMenu(
               text: "Help Center",
               icon: "assets/icons/Question mark.svg",
-              press: () {},
+              press: () async {
+                const String phoneNumber = '6281270416699';
+                const String message = 'Halo, saya membutuhkan bantuan dari TeraTani Care.';
+                final Uri whatsappUri = Uri.parse(
+                  'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+                );
+
+                if (await canLaunchUrl(whatsappUri)) {
+                  await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
+                } else if (context.mounted) { // Tambahkan pengecekan ini
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Tidak dapat membuka WhatsApp'),
+                    ),
+                  );
+                }
+              },
             ),
             ProfileMenu(
               text: "Log Out",
