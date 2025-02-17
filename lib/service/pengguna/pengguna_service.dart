@@ -37,7 +37,6 @@ class PenggunaService {
       // Periksa apakah request berhasil
       if (response.statusCode == 200) {
         // Ambil data dari response)
-        print("Data Pengguna: ${response.data['data']}");
         return response.data['data'] as Map<String, dynamic>;
       } else {
         throw Exception('Gagal mengambil data pengguna');
