@@ -25,6 +25,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String? provinceName;
   String? cityId;
   String? cityName;
+  String? subDistrict;
   String? postalCode;
   String? address;
 
@@ -200,6 +201,30 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           ),
           const SizedBox(height: 20),
           TextFormField(
+            onSaved: (newValue) => subDistrict = newValue,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                removeError(error: kSubdistrictNullError);
+              }
+              return;
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                addError(error: kSubdistrictNullError);
+                return "";
+              }
+              return null;
+            },
+            decoration: const InputDecoration(
+              labelText: "Kecamatan",
+              hintText: "Masukkan kecamatan Anda",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              suffixIcon:
+                  CustomSurffixIcon(svgIcon: "assets/icons/Location point.svg"),
+            ),
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
             keyboardType: TextInputType.phone,
             onSaved: (newValue) => postalCode = newValue,
             onChanged: (value) {
@@ -280,6 +305,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                     cityId!,
                     cityName!,
                     provinceId!,
+                    subDistrict!,
                     provinceName!,
                     postalCode!,
                   );

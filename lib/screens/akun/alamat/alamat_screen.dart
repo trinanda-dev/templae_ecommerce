@@ -42,6 +42,12 @@ class AlamatScreen extends StatefulWidget {
         appBar: AppBar(
           title: const Text(
             'Alamat Saya',
+            style: TextStyle(
+              fontFamily: 'Muli',
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black
+            )
           ),
           backgroundColor: Colors.white,
           elevation: 0,
@@ -198,14 +204,18 @@ class AlamatScreen extends StatefulWidget {
     // Widget untuk menampilkan alamat dalam bentuk kartu
     Widget _buildAddressCard(Map<String, dynamic> address) {
       final alamatProvier = Provider.of<AlamatProvider>(context, listen: false);
-      final addressCount = alamatProvier.alamatTokoList.length;
-      final isMainAddress = address['is_utama'] == 1;
+      
 
 
       return Dismissible(
         key: Key(address['id'].toString()),
         direction: DismissDirection.horizontal,
         confirmDismiss: (direction) async {
+          final addressCount = alamatProvier.alamatTokoList.length;
+          final isMainAddress = address['is_utama'] == 1;
+
+          debugPrint("Dikonfimasi hapus ID: ${address['id']}");
+
           if (direction == DismissDirection.endToStart) {
             // Cek jika adalah alamat utama
             if(isMainAddress) {
@@ -281,7 +291,19 @@ class AlamatScreen extends StatefulWidget {
               }
             );
           } else if (direction == DismissDirection.startToEnd) {
-            if (isMainAddress || addressCount == 1) {
+            if (isMainAddress) {
+              debugPrint("❌ Alamat utama tidak boleh dihapus.");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Alamat utama tidak dapat dihapus!"))
+              );
+              return false;
+            }
+
+            if (addressCount == 1) {
+              debugPrint("❌ Tidak bisa menghapus karena hanya ada satu alamat.");
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Minimal harus memiliki satu alamat."))
+              );
               return false;
             }
             // Geser ke kiri: Hapus alamat
@@ -353,15 +375,11 @@ class AlamatScreen extends StatefulWidget {
           return false;
         },
         onDismissed: (direction) {
+          debugPrint("Menghapus alamat dengan ID; ${address['id']}, Nama: ${address['pengguna']['nama']}, Nomor HP: ${address['pengguna']['nomor_hp']}");
           if (direction == DismissDirection.startToEnd) {
-            // Geser ke kuru: Hapus alamat
+            // Hanya hapus jika swipe ke kiri
             alamatProvier.deleteAlamatToko(address['id']);
-          } else if (direction == DismissDirection.endToStart) {
-            // Geser ke kanan: Atur sebagai alamat utama
-            
           }
-          // Panggil fungsi deletAlamatToko dari provider
-          alamatProvier.deleteAlamatToko(address['id']);
         },
         background: ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -426,6 +444,8 @@ class AlamatScreen extends StatefulWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   Text(
                     address['pengguna']['nomor_hp'] ?? '',
@@ -448,7 +468,7 @@ class AlamatScreen extends StatefulWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Row(
+              Wrap(
                 children: [
                   Text(
                     address['kota'] ?? '',
@@ -460,6 +480,14 @@ class AlamatScreen extends StatefulWidget {
                   ),
                   Text(
                     ', ${address['provinsi'] ?? ''}',
+                    style: const TextStyle(
+                      fontFamily: 'Muli',
+                      fontSize: 14,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  Text(
+                    ', ${address['kecamatan'] ?? ''}',
                     style: const TextStyle(
                       fontFamily: 'Muli',
                       fontSize: 14,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/helper/currency.dart';
+import 'package:shop_app/screens/validasi_ongkir/validasi_ongkir_screen.dart';
 import '../../../constants.dart';
 import '../../../provider/cart/cart_provider.dart';
 
@@ -32,7 +35,7 @@ class CheckoutCard extends StatelessWidget {
       child: SafeArea(
         child: Consumer<CartProvider>(
           builder: (context, cartProvider, child) {
-            final total = cartProvider.cartTotal; 
+            final total = cartProvider.cartTotal;
             return Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,10 +76,10 @@ class CheckoutCard extends StatelessWidget {
                                   child: Currency(
                                     value: double.parse(total.toString()),
                                     style: const TextStyle(
-                                      fontSize: 16, 
+                                      fontSize: 16,
                                       color: Colors.black,
                                     ),
-                                  )
+                                  ),
                                 )
                               ],
                             ),
@@ -86,10 +89,42 @@ class CheckoutCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Tambahkan logic untuk melakukan check out
-                        },
-                        child: const Text("Check Out"),
+                        onPressed: cartProvider.isLoading
+                            ? null // Matikan tombol jika sedang loading
+                            : () async {
+                                bool checkoutSuccess = await cartProvider.checkout();
+                                if (checkoutSuccess) {
+                                  final pesananId = cartProvider.latestPesananIId;
+
+                                  // Navigasi ke halaman validasi ongkir
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.fade,
+                                      child: ValidasiOngkirScreen(
+                                        pesananId: pesananId!,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                        child: cartProvider.isLoading
+                            ? SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: Lottie.asset(
+                                  'assets/lottie/loading-2.json',
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : const Text(
+                                "Checkout",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                       ),
                     ),
                   ],

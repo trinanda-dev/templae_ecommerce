@@ -22,6 +22,7 @@ class AuthService {
     required String city,
     required String provinceId,
     required String province,
+    required String subDistrict,
     required String postalCode,
   }) async {
     final response = await client.post(
@@ -40,6 +41,7 @@ class AuthService {
         'kota': city,
         'id_provinsi': provinceId,
         'provinsi': province,
+        'kecamatan': subDistrict,
         'kode_pos': postalCode,
       })
     );

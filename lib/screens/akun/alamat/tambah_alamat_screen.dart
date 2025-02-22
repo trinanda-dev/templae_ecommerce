@@ -17,19 +17,20 @@ class TambahAlamatScreen extends StatefulWidget{
 
 class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
   final _formKey = GlobalKey<FormState>();
-  // final List<String?> errors = [];
   bool _isUtama = false;
   bool _isLoading = false;
   String? provinceId;
   String? provinceName;
   String? cityId;
   String? cityName;
+  String? subDistrict;
   String? postalCode;
   String? address;
 
   final TextEditingController _provinsiController = TextEditingController();
   final TextEditingController _kotaController = TextEditingController();
   final TextEditingController _alamatLengkapController = TextEditingController();
+  final TextEditingController _kecamatanController = TextEditingController();
   final TextEditingController _kodePosController = TextEditingController();
 
   @override
@@ -170,6 +171,12 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
         backgroundColor: Colors.white,
         title: const Text(
           'Tambah Alamat Baru',
+          style: TextStyle(
+            fontFamily: 'Muli',
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black
+          )
         ),
         titleSpacing: 0,
         elevation: 0,
@@ -302,6 +309,67 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                   }
                   return null;
                 }
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                style: const TextStyle(
+                  fontFamily: 'Muli',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
+                cursorColor: Colors.green,
+                cursorHeight: 1.0,
+                controller: _kecamatanController,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Colors.grey, 
+                      width: 1.0
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Colors.red,
+                      width: 1.0,
+                    )
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: Colors.green,
+                      width: 1.0,
+                    )
+                  ),
+                  labelText: 'Kecamatan',
+                  labelStyle: const TextStyle(
+                    fontFamily: 'Muli',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Colors.grey
+                  ),
+                  floatingLabelStyle: const TextStyle(
+                    fontFamily: 'Muli',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Colors.green
+                  ),
+                  hintText: 'Masukkan kecamatan Anda',
+                  hintStyle: const TextStyle(
+                    fontFamily: 'Muli',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey,
+                  )
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Kecamatan tidak boleh kosong';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               // Alamat lengkap
@@ -492,6 +560,7 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                         'id_provinsi' : provinceId,
                         'kota': _kotaController.text,
                         'id_kota': cityId,
+                        'kecamatan': _kecamatanController.text,
                         'alamat_lengkap': _alamatLengkapController.text,
                         'kode_pos': _kodePosController.text,
                         'is_utama': _isUtama ? 1 : 0,

@@ -55,6 +55,7 @@ class AuthProvider with ChangeNotifier {
     String city,
     String provinceId,
     String province,
+    String subDistrict,
     String postalCode,
     ) async {
     _isLoading = true;
@@ -73,6 +74,7 @@ class AuthProvider with ChangeNotifier {
         city: city,
         provinceId: provinceId,
         province: province,
+        subDistrict: subDistrict,
         postalCode: postalCode,
       );
 

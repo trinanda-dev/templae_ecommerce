@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -200,6 +201,40 @@ class CartService {
       };
     } else {
       throw Exception('Gagal mendapatkan daftar item di keranjang');
+    }
+  }
+
+  // Method yang digunakan untuk melakukan checkout terhadap produk
+  Future<Map<String, dynamic>> checkout() async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('Token tidak ditemukan. Anda harus login terlebih dahulu.');
+    }
+
+    final url = Uri.parse('$baseUrl/checkout');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      final response = await http.post(url, headers: headers);
+      
+      // Debugging untuk melihat isi response
+      debugPrint("Checkout API Response: ${response.body}");
+      
+      final result = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return result;
+      } else {
+        return {
+          'success': false,
+          'message': result['message'] ?? 'Terjadi kesalahan saat checkout.',
+        };
+      }
+    } catch (e) {
+      throw Exception('Gagal melakukan checkout: $e');
     }
   }
 }

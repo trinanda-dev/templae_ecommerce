@@ -8,6 +8,7 @@ import 'package:shop_app/provider/category/category_provider.dart';
 import 'package:shop_app/provider/discount_banner/discount_banner_provider.dart';
 import 'package:shop_app/provider/invitation_code_provider/invitation_code_provider.dart';
 import 'package:shop_app/provider/pengguna/pengguna_provider.dart';
+import 'package:shop_app/provider/pesanan/pesanan_provider.dart';
 import 'package:shop_app/provider/produk/produk_provider.dart';
 import 'package:shop_app/provider/raja_ongkir_provider/raja_ongkir_provider.dart';
 import 'package:shop_app/provider/signup_provider/signup_provider.dart';
@@ -35,6 +36,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AlamatProvider()),
         ChangeNotifierProvider(create: (_) => PenggunaProvider()),
         ChangeNotifierProvider(create: (_) => DiscountBannerProvider()),
+        ChangeNotifierProvider(create: (_) => PesananProvider()),
       ],
       child:  const MyApp()
     )

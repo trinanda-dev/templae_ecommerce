@@ -38,7 +38,12 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 const Text(
                   "Your Cart",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Muli',
+                  ),
                 ),
                 Text(
                   "${cartProvider.cartItem.length} items",
@@ -69,8 +74,8 @@ class _CartScreenState extends State<CartScreen> {
                               child: Center(
                                 child: Lottie.asset(
                                   'assets/lottie/empty-cart.json',
-                                  width: 200,
-                                  height: 200,
+                                  width: 250,
+                                  height: 205,
                                   fit: BoxFit.cover,
                                 ),
                               ),

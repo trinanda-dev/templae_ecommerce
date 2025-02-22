@@ -8,7 +8,9 @@ class CartProvider extends ChangeNotifier {
   double _cartTotal = 0.0;
   List<int> _selectedItemIds = [];
   bool _isLoading = false;
+  int? _latestPesananId;
 
+  int? get latestPesananIId => _latestPesananId;
   List<Map<String, dynamic>> get cartItem => _cartItem;
   double get cartTotal => _cartTotal;
   List<int> get selectedItemIds => _selectedItemIds;
@@ -167,6 +169,32 @@ class CartProvider extends ChangeNotifier {
       return result;
     } catch (e) {
       throw Exception('Gagal mendapatkan jumlah cart item: $e');
+    }
+  }
+
+  // Method yang digunakan untuk melakukan checkout terhadap produk di dalam keranjang
+  Future<bool> checkout() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final result = await _cartService.checkout();
+      debugPrint("Checkout Response: $result"); // Debug response
+      if (result.containsKey('success') && result['success'] == true) {
+        _cartItem.clear();
+        _cartTotal = 0.0;
+        _latestPesananId = result['data']['id'];
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Checkout Error: $e"); // Debug error
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }

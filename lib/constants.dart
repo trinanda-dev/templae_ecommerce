@@ -54,8 +54,7 @@ const String kInvalidInvitationCode = "Kode undangan tidak valid";
 const String kStoreNameNullError = "Masukkan nama toko Anda";
 const String kpostalCodeNullError = "Masukkan kode pos Anda";
 const String kInvalidPostalCode = "Kode pos tidak valid";
-
-
+const String kSubdistrictNullError = "Masukkan kecamatan Anda";
 
 
 final otpInputDecoration = InputDecoration(
