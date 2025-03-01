@@ -34,7 +34,7 @@ class PopularProducts extends StatelessWidget {
             if (popularProducts.isEmpty)
                 Center(
                   child: Lottie.asset(
-                    'assets/lottie/empty-wishlist.json',
+                    'assets/lottie/empty-cart.json',
                     height: 100,
                     width: 100,
                     fit: BoxFit.cover,

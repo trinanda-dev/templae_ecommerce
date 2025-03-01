@@ -58,7 +58,6 @@ class _SignFormState extends State<SignForm> {
               } else if (emailValidatorRegExp.hasMatch(value)) {
                 removeError(error: kInvalidEmailError);
               }
-              return;
             },
             validator: (value) {
               if (value!.isEmpty) {
@@ -88,7 +87,6 @@ class _SignFormState extends State<SignForm> {
               } else if (value.length >= 8) {
                 removeError(error: kShortPassError);
               }
-              return;
             },
             validator: (value) {
               if (value!.isEmpty) {
@@ -146,7 +144,12 @@ class _SignFormState extends State<SignForm> {
                   await authProvider.login(email!, password!);
                   Navigator.pushNamed(context, LoginSuccessScreen.routeName);
                 } catch (e) {
-                  addError(error: e.toString());
+                  // Menangani error dengan cara yang lebih baik
+                  String errorMessage = _handleAuthError(e.toString());
+                  setState(() {
+                    errors.clear();
+                    errors.add(errorMessage);
+                  });
                 }
               }
             },
@@ -164,5 +167,18 @@ class _SignFormState extends State<SignForm> {
         ],
       ),
     );
+  }
+
+  /// **Fungsi untuk menangani error dari backend**
+  String _handleAuthError(String error) {
+    if (error.contains("Email atau kata sandi salah")) {
+      return "Email atau password yang kamu masukkan salah.";
+    } else if (error.contains("User tidak ditemukan")) {
+      return "Akun tidak ditemukan, silakan daftar terlebih dahulu.";
+    } else if (error.contains("Akun tidak aktif")) {
+      return "Akun ini belum aktif. Periksa email untuk verifikasi.";
+    } else {
+      return "Terjadi kesalahan, silakan coba lagi.";
+    }
   }
 }

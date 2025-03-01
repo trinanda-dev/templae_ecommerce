@@ -10,7 +10,9 @@ class PesananProvider extends ChangeNotifier {
   String? _errorMessage; // Menyimpan pesan error jika ada
   bool _isUploading = false;
   String? _buktiTransferUrl;
+  List<Map<String, dynamic>> _pesananList = [];
 
+  List<Map<String, dynamic>> get pesananList => _pesananList;
   Map<String, dynamic>? get pesanan => _pesanan;
   bool get isLoading => _isLoading;
   bool get hasUpdated => _hasUpdated;
@@ -84,6 +86,30 @@ class PesananProvider extends ChangeNotifier {
     } finally {
       _isUploading = false;
       notifyListeners();
+    }
+  }
+
+  // Method yang digunakan untuk mengambil seluruh pesanan
+  Future<void> fetchAllPesanan() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final result = await _pesananService.fetchAllPesanan();
+
+      if (result['success']) {
+        _pesananList = List<Map<String, dynamic>>.from(result['data']);
+        notifyListeners();
+      } else {
+        _errorMessage = result['message'];
+        notifyListeners();
+      }
+    } catch (e) {
+      _errorMessage = "Gagal mengambil pesanan: $e";
+      notifyListeners();
+    } finally {
+      _isLoading = false;
     }
   }
 }

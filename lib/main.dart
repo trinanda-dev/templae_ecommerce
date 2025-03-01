@@ -11,6 +11,7 @@ import 'package:shop_app/provider/pengguna/pengguna_provider.dart';
 import 'package:shop_app/provider/pesanan/pesanan_provider.dart';
 import 'package:shop_app/provider/produk/produk_provider.dart';
 import 'package:shop_app/provider/raja_ongkir_provider/raja_ongkir_provider.dart';
+import 'package:shop_app/provider/reset_password/reset_password_provider.dart';
 import 'package:shop_app/provider/signup_provider/signup_provider.dart';
 import 'package:shop_app/provider/signup_user_informations/signup_user_information_provider.dart';
 import 'package:shop_app/provider/wishlist/wishlist_provider.dart';
@@ -37,6 +38,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PenggunaProvider()),
         ChangeNotifierProvider(create: (_) => DiscountBannerProvider()),
         ChangeNotifierProvider(create: (_) => PesananProvider()),
+        ChangeNotifierProvider(create: (_) => ResetPasswordProvider()),
       ],
       child:  const MyApp()
     )
@@ -51,7 +53,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'The Flutter Way - Template',
+      title: 'TeraTani',
       theme: AppTheme.lightTheme(context),
       initialRoute: SplashScreen.routeName,
       routes: routes,

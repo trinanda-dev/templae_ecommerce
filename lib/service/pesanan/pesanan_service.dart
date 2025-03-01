@@ -83,4 +83,40 @@ class PesananService {
       throw Exception('Terjadi kesalahan saat mengunggah bukti transfer: $e');
     }
   }
+
+  // Method yang digunakan untuk mengambil semua pesanan pengguna\
+  Future<Map<String, dynamic>> fetchAllPesanan() async {
+    final token = await _getToken();
+    if (token == null) {
+      return {
+        'success': false,
+        'message' : 'Token tidak ditemukan. Anda harus login terlebih dahulu.'
+      };
+    }
+
+    final url = Uri.parse('$baseUrl/pesanan');
+    final headers = {
+      'Content-Type' : 'application/json',
+      'Authorization' : 'Bearer $token'
+    };
+
+    try {
+      final response = await http.get(url, headers: headers);
+      final result = json.decode(response.body);
+
+      if (response.statusCode == 200 && result['success'] == true) {
+        return result;
+      } else {
+        return {
+          'success' : false,
+          'message' : result['message'] ?? 'Gagal mengambil data pesanan.'
+        };
+      }
+    } catch (e) {
+      return {
+        'success' : false,
+        'message' : 'Terjadi kesalahan saat mengambil pesanan: $e'
+      };
+    }
+  }
 }

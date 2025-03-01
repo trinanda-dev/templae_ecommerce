@@ -121,8 +121,8 @@ class CheckoutCard extends StatelessWidget {
                                 "Checkout",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                                  fontSize: 14,
+                                  fontFamily: 'Muli'
                                 ),
                               ),
                       ),

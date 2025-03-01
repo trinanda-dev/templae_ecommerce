@@ -5,6 +5,8 @@ import 'package:shop_app/provider/brand/brand_provider.dart';
 import 'package:shop_app/provider/category/category_provider.dart';
 import 'package:shop_app/provider/discount_banner/discount_banner_provider.dart';
 import 'package:shop_app/provider/produk/produk_provider.dart';
+import 'package:shop_app/provider/pesanan/pesanan_provider.dart'; // ✅ Tambahkan PesananProvider
+import 'package:shop_app/provider/wishlist/wishlist_provider.dart';
 
 import 'components/categories.dart';
 import 'components/discount_banner.dart';
@@ -35,11 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _fetchInitialData() async {
     try {
-      await Provider.of<DiscountBannerProvider>(context, listen: false)
-          .fetchDiscountBanner();
+      await Provider.of<DiscountBannerProvider>(context, listen: false).fetchDiscountBanner();
       await Provider.of<CategoryProvider>(context, listen: false).fetchCategories();
       await Provider.of<BrandProvider>(context, listen: false).fetchBrands();
       await Provider.of<ProdukProvider>(context, listen: false).fetchProducts();
+      await Provider.of<WishlistProvider>(context, listen: false).fetchWishlist();
+
+      // ✅ Tambahkan Pemanggilan PesananProvider di Home
+      await Provider.of<PesananProvider>(context, listen: false).fetchAllPesanan(); 
+      
     } catch (e) {
       debugPrint("Gagal mengambil data: $e");
     } finally {
@@ -57,12 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     try {
-      // Pada refresh, kita bisa memaksa reload jika diinginkan
-      await Provider.of<DiscountBannerProvider>(context, listen: false)
-          .fetchDiscountBanner(forceReload: true);
+      await Provider.of<DiscountBannerProvider>(context, listen: false).fetchDiscountBanner(forceReload: true);
       await Provider.of<CategoryProvider>(context, listen: false).fetchCategories();
       await Provider.of<BrandProvider>(context, listen: false).fetchBrands();
       await Provider.of<ProdukProvider>(context, listen: false).fetchProducts();
+      await Provider.of<PesananProvider>(context, listen: false).fetchAllPesanan(); // 🔥 Tambahkan fetch ulang pesanan
+      await Provider.of<WishlistProvider>(context, listen: false).fetchWishlist();
     } catch (e) {
       debugPrint("Gagal merefresh data: $e");
     } finally {

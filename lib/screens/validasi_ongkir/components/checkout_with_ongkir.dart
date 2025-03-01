@@ -117,6 +117,10 @@ class CheckoutWithOngkirCard extends StatelessWidget {
                         content: Text(
                           "Tunggu sebentar, kami sedang menghitung ongkos kirim Anda.",
                           textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Muli',
+                            fontSize: 14
+                          ),
                         ),
                         backgroundColor: Colors.orange,
                       ),
@@ -141,7 +145,7 @@ class CheckoutWithOngkirCard extends StatelessWidget {
               "Lanjut ke Pembayaran",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 14,
                 fontFamily: 'Muli',
               ),
             ),

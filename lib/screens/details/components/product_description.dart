@@ -6,15 +6,50 @@ import 'package:shop_app/provider/wishlist/wishlist_provider.dart';
 import '../../../constants.dart';
 import '../../../models/Product.dart';
 
-class ProductDescription extends StatelessWidget {
+class ProductDescription extends StatefulWidget {
   const ProductDescription({
     super.key,
     required this.product,
-    this.pressOnSeeMore,
   });
 
   final Product product;
-  final GestureTapCallback? pressOnSeeMore;
+
+  @override
+  State<ProductDescription> createState() => _ProductDescriptionState();
+}
+
+class _ProductDescriptionState extends State<ProductDescription> {
+  bool _isExpanded = false; // 🔥 Status apakah deskripsi sedang full atau tidak
+  bool _shouldShowSeeMore = false; // 🔥 Status apakah tombol "Lihat Selengkapnya" perlu ditampilkan
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfTextExceedsMaxLines();
+  }
+
+  // 🔥 Fungsi untuk mengecek apakah teks lebih dari 4 baris
+  void _checkIfTextExceedsMaxLines() {
+    final textSpan = TextSpan(
+      text: widget.product.deskripsi,
+      style: const TextStyle(
+        fontSize: 14,
+        fontFamily: 'Muli'
+      ), // Pastikan sesuai dengan style asli
+    );
+
+    final textPainter = TextPainter(
+      text: textSpan,
+      maxLines: 4, // Batas jumlah baris yang ingin dicek
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: 400); // Sesuaikan maxWidth dengan layout aslinya
+
+    if (textPainter.didExceedMaxLines) {
+      setState(() {
+        _shouldShowSeeMore = true; // 🔥 Jika teks melebihi 4 baris, tampilkan "Lihat Selengkapnya"
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +57,7 @@ class ProductDescription extends StatelessWidget {
 
     // Cek apakah produk ada di wishlist
     final bool isInWishlist = wishlistProvider.wishlist.any(
-      (item) => item['produk_id'] == product.id,
+      (item) => item['produk_id'] == widget.product.id,
     );
 
     return Column(
@@ -31,7 +66,7 @@ class ProductDescription extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            product.nama,
+            widget.product.nama,
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
@@ -40,7 +75,7 @@ class ProductDescription extends StatelessWidget {
           child: GestureDetector(
             onTap: () async {
               // ✅ Toggle wishlist status dengan animasi
-              await wishlistProvider.toggleWishlistStatus(product.id);
+              await wishlistProvider.toggleWishlistStatus(widget.product.id);
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
@@ -69,39 +104,42 @@ class ProductDescription extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 64,
-          ),
+          padding: const EdgeInsets.only(left: 20, right: 64),
           child: Text(
-            product.deskripsi,
-            maxLines: 3,
+            widget.product.deskripsi,
+            maxLines: _isExpanded ? null : 4, // 🔥 Jika isExpanded = true, tampilkan semua
+            overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 12,
-          ),
-          child: GestureDetector(
-            onTap: pressOnSeeMore,
-            child: const Row(
-              children: [
-                Text(
-                  "Lihat Selengkapnya",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, color: kPrimaryColor),
-                ),
-                SizedBox(width: 5),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 12,
-                  color: kPrimaryColor,
-                ),
-              ],
+        if (_shouldShowSeeMore) // 🔥 Hanya tampilkan jika teks lebih dari 4 baris
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isExpanded = !_isExpanded; // 🔥 Toggle expand/collapse
+                });
+              },
+              child: Row(
+                children: [
+                  Text(
+                    _isExpanded ? "Lihat Lebih Sedikit" : "Lihat Selengkapnya",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: kPrimaryColor,
+                      fontFamily: 'Muli'
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Icon(
+                    _isExpanded ? Icons.arrow_upward : Icons.arrow_forward_ios,
+                    size: 12,
+                    color: kPrimaryColor,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }

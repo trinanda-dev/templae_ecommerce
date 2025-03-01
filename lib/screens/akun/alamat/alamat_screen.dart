@@ -5,7 +5,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/alamat/alamat_provider.dart';
 import 'package:shop_app/screens/akun/alamat/tambah_alamat_screen.dart';
-import 'package:shop_app/screens/init_screen.dart';
 
 class AlamatScreen extends StatefulWidget {
 
@@ -40,28 +39,18 @@ class AlamatScreen extends StatefulWidget {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             'Alamat Saya',
-            style: TextStyle(
-              fontFamily: 'Muli',
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.black
-            )
+            style: Theme.of(context).textTheme.titleLarge
           ),
           backgroundColor: Colors.white,
           elevation: 0,
+          centerTitle: true,
           titleSpacing: 0,
           leading: IconButton(
             icon: const FaIcon(FontAwesomeIcons.chevronLeft, size: 20, color: Colors.black),
             onPressed: () {
-              Navigator.push(
-                context, 
-                PageTransition(
-                  type: PageTransitionType.fade,
-                  child: const InitScreen() 
-                )
-              );
+              Navigator.pop(context);
             },
           ),
         ),
@@ -145,7 +134,6 @@ class AlamatScreen extends StatefulWidget {
                         style: TextStyle(
                           fontFamily: 'Muli',
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       )
@@ -317,7 +305,7 @@ class AlamatScreen extends StatefulWidget {
                     style: TextStyle(
                       fontFamily: 'Muli',
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 14,
                       color: Colors.black,
                     ),
                     textAlign: TextAlign.center, // Pusatkan judul

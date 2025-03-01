@@ -16,20 +16,18 @@ class ValidasiOngkirScreen extends StatefulWidget {
 }
 
 class _ValidasiOngkirScreenState extends State<ValidasiOngkirScreen> {
-  Timer? _timer; // Timer untuk polling otomatis
+  Timer? _timer;
+  bool _isFirstFetch = true; // 🔥 Cek apakah ini fetch pertama
 
   @override
   void initState() {
     super.initState();
+    _fetchPesanan(firstFetch: true); // 🔥 Fetch pertama kali dengan loading
 
-    // Fetch pertama kali saat halaman dibuka
-    Future.microtask(() =>
-        Provider.of<PesananProvider>(context, listen: false)
-            .fetchPesanan(widget.pesananId));
-
-    // Polling setiap 5 detik
+    // Polling setiap 5 detik tanpa loading animasi
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       debugPrint("Polling pesanan...");
+
       final pesananProvider =
           Provider.of<PesananProvider>(context, listen: false);
 
@@ -37,14 +35,32 @@ class _ValidasiOngkirScreenState extends State<ValidasiOngkirScreen> {
         debugPrint("Status pesanan telah diperbarui, menghentikan polling...");
         _timer?.cancel();
       } else {
-        pesananProvider.fetchPesanan(widget.pesananId);
+        _fetchPesanan(firstFetch: false); // 🔥 Polling tanpa loading
       }
     });
   }
 
+  // 🔥 Fetch pesanan dengan opsi loading hanya untuk fetch pertama kali
+  Future<void> _fetchPesanan({required bool firstFetch}) async {
+    if (firstFetch) {
+      setState(() {
+        _isFirstFetch = true;
+      });
+    }
+
+    await Provider.of<PesananProvider>(context, listen: false)
+        .fetchPesanan(widget.pesananId);
+
+    if (mounted) {
+      setState(() {
+        _isFirstFetch = false; // 🔥 Setelah fetch pertama kali, set false
+      });
+    }
+  }
+
   @override
   void dispose() {
-    _timer?.cancel(); // Hentikan polling saat user meninggalkan halaman
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -55,14 +71,9 @@ class _ValidasiOngkirScreenState extends State<ValidasiOngkirScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Text(
+        title: Text(
           "Detail Pesanan",
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontFamily: 'Muli',
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
       ),
@@ -70,13 +81,14 @@ class _ValidasiOngkirScreenState extends State<ValidasiOngkirScreen> {
         builder: (context, pesananProvider, child) {
           final pesanan = pesananProvider.pesanan;
 
-          if (pesananProvider.isLoading) {
-            return Center(
+          // 🔥 Hanya tampilkan loading saat fetch pertama kali
+          if (pesananProvider.isLoading && _isFirstFetch) {
+            return  Center(
               child: Lottie.asset(
                 'assets/lottie/loading-2.json',
                 height: 100,
-                width: 100,
-              )
+                width: 100
+              )  // Ganti dengan loading kecil
             );
           }
 
@@ -89,7 +101,6 @@ class _ValidasiOngkirScreenState extends State<ValidasiOngkirScreen> {
             );
           }
 
-          // Periksa apakah 'items' tidak null & memiliki data
           final List<dynamic> items = pesanan['items'] ?? [];
 
           return Column(
@@ -122,7 +133,7 @@ class _ValidasiOngkirScreenState extends State<ValidasiOngkirScreen> {
                 totalHarga: double.parse(pesanan['total_harga'].toString()),
                 ongkosKirim: double.parse(pesanan['ongkos_kirim'].toString()),
                 grandTotal: double.parse(pesanan['grand_total'].toString()),
-                statusPesanan: pesanan['status'], // Kirim status pesanan
+                statusPesanan: pesanan['status'],
               ),
             ],
           );

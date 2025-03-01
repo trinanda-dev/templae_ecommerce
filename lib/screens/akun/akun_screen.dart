@@ -69,7 +69,6 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
-              fontWeight: FontWeight.bold,
               fontFamily: 'Muli',
             ),
           ),
@@ -85,7 +84,6 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
             style: const  TextStyle(
               color: Colors.white,
               fontSize: 14,
-              fontWeight: FontWeight.bold,
               fontFamily: 'Muli',
             ),
           ),
@@ -100,10 +98,14 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Profile"),
+        title: Text(
+          "Edit Profile",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 0,
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
           onPressed: () => Navigator.pop(context),
@@ -156,21 +158,21 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                     controller: _namaController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.red,
                           width: 1,
                         )
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.green,
                           width: 1.0,
@@ -193,7 +195,7 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Name tidak boleh kosong';
+                        return 'Nama tidak boleh kosong';
                       }
                       return null;
                     },
@@ -212,21 +214,21 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.red,
                           width: 1,
                         )
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.green,
                           width: 1.0,
@@ -267,21 +269,21 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                     controller: _namaTokoController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.red,
                           width: 1,
                         )
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(28),
                         borderSide: const BorderSide(
                           color: Colors.green,
                           width: 1.0,
@@ -332,7 +334,6 @@ class _EditProfileDataScreenState extends State<EditProfileDataScreen> {
                           style: TextStyle(
                             fontFamily: 'Muli',
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
                             color: Colors.white
                           )
                         ),

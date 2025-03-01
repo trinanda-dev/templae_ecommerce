@@ -15,7 +15,23 @@ class AllCategoriesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Semua Kategori'),
+        title: Text(
+          'Semua Kategori',
+          style: Theme.of(context).textTheme.titleLarge
+          ),
+          centerTitle: true,
+          titleSpacing: 0,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.close,
+              size: 24,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

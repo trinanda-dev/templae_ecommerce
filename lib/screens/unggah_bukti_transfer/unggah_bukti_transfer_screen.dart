@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shop_app/provider/pesanan/pesanan_provider.dart';
 import 'package:shop_app/screens/login_success/login_success_screen.dart';
 
@@ -18,15 +20,36 @@ class UploadBuktiTransferScreen extends StatefulWidget {
 
 class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
   File? _selectedImage;
+  File? _compressedImage;
 
   // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
+      File originalFile = File(pickedFile.path);
+
+      // 🔥 Kompres gambar sebelum ditampilkan
+      File? compressedFile = await _compressImage(originalFile);
+
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImage = originalFile;
+        _compressedImage = compressedFile;
       });
     }
+  }
+
+  // 🔥 **Fungsi untuk mengompres gambar**
+  Future<File?> _compressImage(File file) async {
+    final tempDir = await getTemporaryDirectory();
+    final targetPath = "${tempDir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path, 
+      targetPath,
+      quality: 70,  // 🔥 Sesuaikan kualitas (0 - 100)
+    );
+
+    return result != null ? File(result.path) : null;
   }
 
   @override
@@ -35,44 +58,80 @@ class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pembayaran Transfer"),
+        title:  Text(
+          "Pembayaran Transfer",
+          style: Theme.of(context).textTheme.titleLarge 
+        ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // ✅ Bagian atas: Logo BCA & Nomor Rekening
-            Column(
-              children: [
-                Image.asset(
-                  'assets/images/logo-bca.png', // Ganti dengan path logo BCA
-                  width: 100,
+            // ✅ **Bagian Informasi Rekening**
+            Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFf5f5f5), Color(0xFFe0e0e0)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Nomor Rekening: 1234 5678 9012",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // ✅ Bagian tengah: Instruksi Pembayaran
-            const Text(
-              "Silahkan transfer sesuai jumlah yang diberikan dan unggah bukti transfernya di bawah ini",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'Muli',
-                color: Colors.black54,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/logo-bca.png',
+                    width: 80,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Nomor Rekening",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    "1234 5678 9012",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Silahkan transfer sesuai jumlah yang diberikan dan unggah bukti transfernya di bawah ini.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 30),
 
-            // ✅ Bagian bawah: Upload Bukti Transfer
+            // ✅ **Bagian Upload Bukti Transfer**
             GestureDetector(
               onTap: _pickImage,
               child: Container(
@@ -84,7 +143,7 @@ class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
                   color: Colors.grey[200],
                 ),
                 child: _selectedImage != null
-                    ? Image.file(_selectedImage!, fit: BoxFit.cover)
+                    ? Image.file(_compressedImage!, fit: BoxFit.cover)
                     : const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -104,14 +163,15 @@ class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
             ),
             const SizedBox(height: 20),
 
-            // ✅ Indikator Loading
-            if (pesananProvider.isUploading) Lottie.asset(
-              'assets/lottie/loading-2.json',
-              height: 100,
-              width: 100,
-            ),
+            // ✅ **Indikator Loading saat Upload**
+            if (pesananProvider.isUploading)
+              Lottie.asset(
+                'assets/lottie/loading-2.json',
+                height: 100,
+                width: 100,
+              ),
 
-            // ✅ Tampilkan Bukti Transfer yang Sudah Diupload
+            // ✅ **Tampilkan Bukti Transfer yang Sudah Diupload**
             if (pesananProvider.buktiTransferUrl != null)
               Column(
                 children: [
@@ -128,7 +188,7 @@ class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
                 ],
               ),
 
-            // ✅ Tampilkan pesan error jika ada
+            // ✅ **Tampilkan pesan error jika ada**
             if (pesananProvider.errorMessage != null)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -138,26 +198,28 @@ class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
                 ),
               ),
 
-            // ✅ Tombol Kirim
+            const SizedBox(height: 20),
+
+            // ✅ **Tombol Kirim**
             ElevatedButton(
               onPressed: pesananProvider.isUploading
                   ? null
                   : () {
-                      if (_selectedImage == null) {
+                      if (_compressedImage == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text("Silakan unggah bukti transfer terlebih dahulu")),
                         );
                       } else {
-                        // Logging untuk memastikan file dikirim
-                        debugPrint("Megirim file: ${_selectedImage!.path}");
-                        pesananProvider.uploadBuktiTransfer(widget.pesananId, _selectedImage!);
+                        // 🔥 Kirim gambar yang sudah dikompresi
+                        debugPrint("Mengirim file: ${_compressedImage!.path}");
+                        pesananProvider.uploadBuktiTransfer(widget.pesananId, _compressedImage!);
                         Navigator.push(
-                          context, 
+                          context,
                           PageTransition(
                             type: PageTransitionType.fade,
-                            child: const LoginSuccessScreen()
-                          )
+                            child: const LoginSuccessScreen(),
+                          ),
                         );
                       }
                     },
@@ -168,9 +230,9 @@ class _UploadBuktiTransferScreenState extends State<UploadBuktiTransferScreen> {
               child: const Text(
                 "Kirim",
                 style: TextStyle(
-                  fontSize: 16, 
-                  color: Colors.white, 
-                  fontFamily: 'Muli'
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontFamily: 'Muli',
                 ),
               ),
             ),

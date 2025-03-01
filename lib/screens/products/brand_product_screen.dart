@@ -51,6 +51,22 @@ class _BrandProductScreenState extends State<BrandProductScreen> {
       appBar: AppBar(
         title: Text(
           widget.brandName, // ✅ Tampilkan nama brand di app bar
+          style: const TextStyle(
+            fontSize: 14,
+            fontFamily: 'Muli'
+          ),
+        ),
+        titleSpacing: 0,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            size: 24,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: SafeArea(

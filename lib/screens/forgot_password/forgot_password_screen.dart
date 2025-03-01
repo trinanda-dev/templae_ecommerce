@@ -29,7 +29,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Please enter your email and we will send \nyou a link to return to your account",
+                  "Silahkan masukkan email Anda dan kami akan kirimkan link untuk mereset akun Anda",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 32),

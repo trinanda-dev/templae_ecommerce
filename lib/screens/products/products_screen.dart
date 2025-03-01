@@ -2,21 +2,69 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/components/product_card.dart';
-// import 'package:shop_app/models/Product.dart';
 import 'package:shop_app/provider/produk/produk_provider.dart';
-
+import 'package:shop_app/screens/home/components/search_field.dart';
 import '../details/details_screen.dart';
 
-class ProductsScreen extends StatelessWidget {
+class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
 
   static String routeName = "/products";
 
   @override
+  State<ProductsScreen> createState() => _ProductsScreenState();
+}
+
+class _ProductsScreenState extends State<ProductsScreen> {
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ProdukProvider>(context, listen: false).fetchProducts();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Produk"),
+        titleSpacing: 0,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.close, size: 20),
+              ),
+              Expanded(
+                child: SearchField(
+                  controller: _searchController,
+                  isInProductScreen: true,
+                  onChanged: (query) {
+                    Provider.of<ProdukProvider>(context, listen: false)
+                        .fetchProducts(search: query);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SafeArea(
         child: Consumer<ProdukProvider>(
@@ -35,11 +83,11 @@ class ProductsScreen extends StatelessWidget {
             if (produkProvider.products.isEmpty) {
               return Center(
                 child: Lottie.asset(
-                  'assets/lottie/empty.json',
-                  height: 100,
-                  width: 100,
+                  'assets/lottie/empty-cart.json',
+                  height: 250,
+                  width: 250,
                   fit: BoxFit.cover,
-                )
+                ),
               );
             }
 
@@ -60,19 +108,17 @@ class ProductsScreen extends StatelessWidget {
                     product: product,
                     onPress: () {
                       Navigator.pushNamed(
-                        context, 
+                        context,
                         DetailsScreen.routeName,
-                        arguments: ProductDetailsArguments(
-                          product: product,
-                        )
+                        arguments: ProductDetailsArguments(product: product),
                       );
                     },
                   );
                 },
               ),
             );
-          }
-        )
+          },
+        ),
       ),
     );
   }

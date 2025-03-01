@@ -4,6 +4,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/favorite/favorite_screen.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/screens/profile/profile_screen.dart';
+import 'package:shop_app/screens/transaksi/transaksi_screen.dart';
 
 const Color inActiveIconColor = Color(0xFFB6B6B6);
 
@@ -17,105 +18,50 @@ class InitScreen extends StatefulWidget {
 }
 
 class _InitScreenState extends State<InitScreen> {
-  int currentSelectedIndex = 0;
+  int _currentIndex = 0;
 
-  void updateCurrentIndex(int index) {
-    setState(() {
-      currentSelectedIndex = index;
-    });
-  }
-
-  final pages = [
+  final List<Widget> _pages = [
     const HomeScreen(),
     const FavoriteScreen(),
-    const Center(
-      child: Text("Belum Ada Transaksi"),
-    ),
-    const ProfileScreen()
+    const TransaksiScreen(),
+    const ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[currentSelectedIndex],
+      body: IndexedStack(
+        index: _currentIndex, // 🔥 IndexedStack menyimpan state halaman
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        onTap: updateCurrentIndex,
-        currentIndex: currentSelectedIndex,
+        onTap: (index) => setState(() => _currentIndex = index), // 🔥 Hanya ubah index, tidak rebuild halaman
+        currentIndex: _currentIndex,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Shop Icon.svg",
-              colorFilter: const ColorFilter.mode(
-                inActiveIconColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            activeIcon: SvgPicture.asset(
-              "assets/icons/Shop Icon.svg",
-              colorFilter: const ColorFilter.mode(
-                kPrimaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Heart Icon.svg",
-              colorFilter: const ColorFilter.mode(
-                inActiveIconColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            activeIcon: SvgPicture.asset(
-              "assets/icons/Heart Icon.svg",
-              colorFilter: const ColorFilter.mode(
-                kPrimaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: "Fav",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/Transaction.svg",
-              colorFilter: const ColorFilter.mode(
-                inActiveIconColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            activeIcon: SvgPicture.asset(
-              "assets/icons/Transaction.svg",
-              colorFilter: const ColorFilter.mode(
-                kPrimaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: "Transaksi",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/icons/User Icon.svg",
-              colorFilter: const ColorFilter.mode(
-                inActiveIconColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            activeIcon: SvgPicture.asset(
-              "assets/icons/User Icon.svg",
-              colorFilter: const ColorFilter.mode(
-                kPrimaryColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: "Fav",
-          ),
+          _buildNavItem("assets/icons/Shop Icon.svg", "Home", 0),
+          _buildNavItem("assets/icons/Heart Icon.svg", "Fav", 1),
+          _buildNavItem("assets/icons/Transaction.svg", "Transaksi", 2),
+          _buildNavItem("assets/icons/User Icon.svg", "Profile", 3),
         ],
       ),
+    );
+  }
+
+  /// 🔹 Fungsi untuk membuat item BottomNavigationBar agar lebih rapih
+  BottomNavigationBarItem _buildNavItem(String iconPath, String label, int index) {
+    return BottomNavigationBarItem(
+      icon: SvgPicture.asset(
+        iconPath,
+        colorFilter: ColorFilter.mode(
+          _currentIndex == index ? kPrimaryColor : inActiveIconColor,
+          BlendMode.srcIn,
+        ),
+      ),
+      label: label,
     );
   }
 }

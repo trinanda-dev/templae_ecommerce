@@ -53,7 +53,7 @@ class ValidasiOngkirCard extends StatelessWidget {
                   ),
                   TextSpan(
                     text: " x ${pesananItem['jumlah']}",
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),

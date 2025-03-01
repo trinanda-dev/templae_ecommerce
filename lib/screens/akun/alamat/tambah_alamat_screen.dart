@@ -169,16 +169,12 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           'Tambah Alamat Baru',
-          style: TextStyle(
-            fontFamily: 'Muli',
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black
-          )
+          style: Theme.of(context).textTheme.titleLarge
         ),
         titleSpacing: 0,
+        centerTitle: true,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, size: 24, color: Colors.black),
@@ -224,21 +220,21 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                     color: Colors.green,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.grey,
                       width: 1.0,
                     )
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.red,
                       width: 1.0,
                     )
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.green,
                       width: 1.0,
@@ -282,21 +278,21 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                     color: Colors.green,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.grey,
                       width: 1.0,
                     )
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.red,
                       width: 1.0,
                     )
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.green,
                       width: 1.0,
@@ -323,21 +319,21 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                 controller: _kecamatanController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.grey, 
                       width: 1.0
                     ),
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.red,
                       width: 1.0,
                     )
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.green,
                       width: 1.0,
@@ -385,21 +381,21 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                 controller: _alamatLengkapController,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.grey, 
                       width: 1.0
                     ),
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.red,
                       width: 1.0,
                     )
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(28),
                     borderSide: const BorderSide(
                       color: Colors.green,
                       width: 1.0,
@@ -453,21 +449,21 @@ class _TambahAlamatScreenState extends State<TambahAlamatScreen> {
                       controller: _kodePosController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(28),
                           borderSide: const BorderSide(
                             color: Colors.grey, 
                             width: 1.0
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(28),
                           borderSide: const BorderSide(
                             color: Colors.red,
                             width: 1.0,
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(28),
                           borderSide: const BorderSide(
                             color: Colors.green,
                             width: 1.0,

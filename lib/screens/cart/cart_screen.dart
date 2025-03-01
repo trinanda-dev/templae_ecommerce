@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/cart/cart_provider.dart';
@@ -32,18 +33,14 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Consumer<CartProvider>(
           builder: (context, cartProvider, child) {
             return Column(
               children: [
-                const Text(
+                Text(
                   "Your Cart",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Muli',
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge
                 ),
                 Text(
                   "${cartProvider.cartItem.length} items",
@@ -51,6 +48,18 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ],
             );
+          },
+        ),
+        titleSpacing: 0,
+        elevation: 0,
+        leading: IconButton(
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
+            size: 20,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
           },
         ),
       ),

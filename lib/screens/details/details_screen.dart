@@ -92,7 +92,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
               children: [
                 ProductDescription(
                   product: product,
-                  pressOnSeeMore: () {},
                 ),
                 // Ganti bagian ColorDots dengan QuantityControl
                 TopRoundedContainer(
@@ -137,7 +136,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // Setelah berhasil menambahkan, kembali ke halaman sebelumnya
                 Navigator.pop(context);
               },
-              child: const Text("Tambahkan ke Keranjang"),
+              child: const Text(
+                "Tambahkan ke Keranjang",
+                style: TextStyle(
+                  fontFamily: 'Muli',
+                  fontSize: 14
+                ),
+              ),
             ),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/provider/produk/produk_provider.dart';
 
@@ -34,7 +35,25 @@ class _ProductImagesState extends State<ProductImages> {
           child: AspectRatio(
             aspectRatio: 1,
             child: Image.network(
-              product.images[selectedImage]
+              product.images[selectedImage],
+              errorBuilder: (context, error, stackTrace) {
+                // Tampilkan placeholder jika gagal memuat gambar
+                return Image.asset(
+                  'assets/images/placeholder.png',
+                  fit: BoxFit.cover,
+                ); 
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: Lottie.asset(
+                    'assets/lottie/loading-2.json',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover
+                  )
+                );
+              },
             ),
           ),
         ),
@@ -92,6 +111,24 @@ class SmallProductImage extends StatelessWidget {
         child: Image.network(
           image, // Pakai Image.network agar sesuai dengan API
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            // Tampilkan placeholder jika gagal memuat gambar
+            return Image.asset(
+              'assets/images/placeholder.png',
+              fit: BoxFit.cover,
+            ); 
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Center(
+              child: Lottie.asset(
+                'assets/lottie/loading-2.json',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover
+              )
+            );
+          },
         ),
       ),
     );

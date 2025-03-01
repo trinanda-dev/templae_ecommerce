@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/provider/brand/brand_provider.dart';
 import 'package:shop_app/screens/all_brand/all_brand_screen..dart';
 import 'package:shop_app/screens/products/brand_product_screen.dart';
+import 'package:lottie/lottie.dart';
 
 import 'section_title.dart';
 
@@ -99,6 +100,24 @@ class SpecialOfferCard extends StatelessWidget {
                   fit: BoxFit.contain,
                   width: double.infinity,
                   height: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Tampilkan placeholder jika gagal memuat gambar
+                    return Image.asset(
+                      'assets/images/placeholder.png',
+                      fit: BoxFit.cover,
+                    ); 
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: Lottie.asset(
+                        'assets/lottie/loading-2.json',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover
+                      )
+                    );
+                  },
                 ),
                 Container(
                   decoration: const BoxDecoration(

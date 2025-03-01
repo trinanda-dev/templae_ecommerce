@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 class ProdukService {
   final String baseUrl = 'http://10.0.2.2:8000/api';
 
-  Future<List<dynamic>> getProducts() async {
+  Future<List<dynamic>> getProducts({String search = ""}) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/produk'),
+        Uri.parse('$baseUrl/produk?search=$search'),
       );
 
       if (response.statusCode == 200) {

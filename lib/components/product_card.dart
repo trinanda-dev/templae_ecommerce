@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/helper/currency.dart';
 import 'package:shop_app/provider/wishlist/wishlist_provider.dart';
@@ -48,9 +49,27 @@ class ProductCard extends StatelessWidget {
                     ? Image.network(
                         product.images[0], // Gunakan gambar pertama
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Tampilkan placeholder jika gagal memuat gambar
+                          return Image.asset(
+                            'assets/images/placeholder.png',
+                            fit: BoxFit.cover,
+                          ); 
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: Lottie.asset(
+                              'assets/lottie/loading-2.json',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover
+                            )
+                          );
+                        },
                       )
                     : Image.asset(
-                        "assets/images/shoes2.png",
+                        "assets/images/placeholder.png",
                         fit: BoxFit.cover,
                       ),
               ),

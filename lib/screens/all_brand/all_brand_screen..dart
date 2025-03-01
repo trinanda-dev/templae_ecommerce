@@ -11,7 +11,23 @@ class AllBrandScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Semua Brand"),
+        title: Text(
+          "Semua Brand",
+          style: Theme.of(context).textTheme.titleLarge 
+        ),
+        centerTitle: true,
+        titleSpacing: 0,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            size: 24,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Consumer<BrandProvider>(
         builder: (context, brandProvider, child) {
