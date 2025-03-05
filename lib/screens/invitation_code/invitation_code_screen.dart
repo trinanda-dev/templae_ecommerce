@@ -31,7 +31,7 @@ class InvitationCodeScreen extends StatelessWidget {
                   const InvitationCodeForm(),
                   const SizedBox(height: 16),
                   Text(
-                    "Dengan melanjutkan, Anda menyetujui \ndengann syarat dan ketentuan aplikasi Kami",
+                    "Dengan melanjutkan, Anda menyetujui \nterhadap syarat dan ketentuan aplikasi Kami",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   )
