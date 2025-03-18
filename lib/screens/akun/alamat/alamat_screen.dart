@@ -519,4 +519,4 @@ class AlamatScreen extends StatefulWidget {
         ),
       );
     }
-}
+} 
